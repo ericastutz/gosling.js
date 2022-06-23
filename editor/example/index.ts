@@ -27,6 +27,7 @@ import { EX_SPEC_PILEUP } from './json-spec/pileup';
 import { EX_SPEC_TEMPLATE } from './json-spec/track-template';
 import { EX_SPEC_MOUSE_EVENT } from './json-spec/mouse-event';
 import { EX_SPEC_DEBUG } from './json-spec/debug';
+import { EDGE_BUNDLING } from './json-spec/edge-bundling';
 import * as docExamples from './doc-examples';
 
 // js and json importing from the same file
@@ -121,6 +122,13 @@ export const examples: {
         name: 'DEBUG',
         spec: EX_SPEC_DEBUG,
         hidden: true
+    },
+    EDGE_BUNDLING: {
+        group: 'Visual Encoding',
+        name: 'EDGE_BUNDLING',
+        spec: EDGE_BUNDLING,
+        hidden: false,
+        forceShow: true
     },
     VISUAL_ENCODING: {
         group: 'Visual Encoding',
