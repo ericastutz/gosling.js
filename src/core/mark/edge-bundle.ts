@@ -2,7 +2,8 @@ import type * as PIXI from 'pixi.js';
 import type { GoslingTrackModel } from '../gosling-track-model';
 import { cartesianToPolar } from '../utils/polar';
 import colorToHex from '../utils/color-to-hex';
-import { Bundler } from 'src/mingle-master';
+import { Bundler } from '../../mingle-master';
+
 
 export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: GoslingTrackModel) {
     /* track spec */
