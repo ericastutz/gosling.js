@@ -3,11 +3,12 @@ import type { GoslingSpec } from '@gosling.schema';
 export const EDGE_BUNDLING: GoslingSpec = {
     title: 'Circos',
     description: 'http://circos.ca/intro/genomic_data/',
-    layout: 'linear',
+    layout: 'circular',
     static: true,
     spacing: 1,
     centerRadius: 0.3,
     alignment: 'stack',
+    style: { linkStyle: 'experimentalEdgeBundling' },
     tracks: [
         {
             data: {
@@ -24,7 +25,7 @@ export const EDGE_BUNDLING: GoslingSpec = {
             mark: 'withinLink',
             x: { field: 'p1', type: 'genomic' },
             xe: { field: 'p2_2', type: 'genomic' },
-            stroke: { value: 'lightgray' },
+            stroke: { value: 'red' },
             strokeWidth: { value: 1 },
             width: 700,
             height: 300

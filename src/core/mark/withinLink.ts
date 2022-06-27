@@ -281,7 +281,6 @@ export function drawWithinLink(g: PIXI.Graphics, trackInfo: any, model: GoslingT
                                 y: ((y4 - y1) / (length - 1)) * i + y1
                             };
                         });
-
                         pathForMouseEvent = eventPoints.flatMap(d => [d.x, d.y]);
                     } else {
                         const r = trackOuterRadius - (rowPosition / trackHeight) * trackRingSize;

@@ -6,11 +6,10 @@ import colorToHex from '../utils/color-to-hex';
 export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: GoslingTrackModel) {
     /* track spec */
     const spec = model.spec();
-
-    if (!spec.width || !spec.height) {
+    /* {
         console.warn('Size of a track is not properly determined, so visual mark cannot be rendered');
         return;
-    }
+    } */
 
     /* data */
     const data = model.data();
@@ -63,8 +62,10 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
             const x4 = posE.x;
             const y4 = posE.y;
 
+            //g.moveTo(x1, y1); //start position
+            //g.lineTo(345, 345); //end position
             g.moveTo(x1, y1);
-            g.lineTo(x4, y4);
+            g.bezierCurveTo(345, 345, 345, 345, x4, y4);
         } else {
             // TODO: Need to change this. The below code draw `circular` style links in linear layouts.
             const midX = (x + xe) / 2.0;

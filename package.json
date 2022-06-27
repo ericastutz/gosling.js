@@ -79,7 +79,8 @@
         "rbush": "^3.0.1",
         "react-grid-layout": "^1.2.5",
         "threads": "^1.6.4",
-        "uuid": "^8.3.2"
+        "uuid": "^8.3.2",
+        "vega": "^5.22.1"
     },
     "devDependencies": {
         "@commitlint/cli": "^11.0.0",
