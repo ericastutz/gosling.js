@@ -27,6 +27,7 @@ export const EDGE_BUNDLING: GoslingSpec = {
             xe: { field: 'p2_2', type: 'genomic' },
             stroke: { value: 'red' },
             strokeWidth: { value: 1 },
+            style: { linkStyle: 'experimentalEdgeBundling' },
             width: 700,
             height: 300
         }

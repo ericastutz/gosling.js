@@ -2,14 +2,22 @@ import type * as PIXI from 'pixi.js';
 import type { GoslingTrackModel } from '../gosling-track-model';
 import { cartesianToPolar } from '../utils/polar';
 import colorToHex from '../utils/color-to-hex';
+import { Bundler } from '../../mingle-master';
+
+
 
 export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: GoslingTrackModel) {
     /* track spec */
     const spec = model.spec();
-    /* {
+    {
+
+    console.info('test import', Bundler)
+
+    if (!spec.width || !spec.height) {
+
         console.warn('Size of a track is not properly determined, so visual mark cannot be rendered');
         return;
-    } */
+    } 
 
     /* data */
     const data = model.data();
