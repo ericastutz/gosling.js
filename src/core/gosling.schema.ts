@@ -1,3 +1,4 @@
+import { IsChannelValue } from './gosling.schema.guards';
 import type { Chromosome } from './utils/chrom-size';
 
 /* ----------------------------- ROOT SPEC ----------------------------- */
@@ -421,6 +422,13 @@ export interface Style {
      */
     linkStyle?: 'elliptical' | 'circular' | 'straight' | 'experimentalEdgeBundling';
 
+
+    /**
+     * The tension of edge bundling. __Default__: 0.1 will be used as a default option.
+     */
+     edgeBundlingTension?: number;
+
+
     /**
      * The minimum height of `withinLink` and `betweenLink` marks. Unit is a percentagle. __Default__: `0.5`
      * @Range [0, 1]
@@ -697,13 +705,17 @@ export interface Opacity extends ChannelDeepCommon {
     range?: ValueExtent;
 }
 
+export interface Tension extends ChannelDeepCommon {
+    type?: 'quantitative' | 'nominal';
+}
+
 export interface Text extends Omit<ChannelDeepCommon, 'baseline'> {
     type?: 'quantitative' | 'nominal';
     domain?: string[];
     range?: string[];
 }
 
-export type ChannelDeep = X | Y | Row | Color | Size | Stroke | StrokeWidth | Opacity | Text;
+export type ChannelDeep = X | Y | Row | Color | Size | Stroke | StrokeWidth | Opacity | Text | Tension;
 
 export interface ChannelValue {
     /** Assign a constant value for a visual channel. */

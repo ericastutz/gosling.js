@@ -10,6 +10,7 @@ import { drawEdgeBundling } from './edge-bundle';
 export function drawWithinLink(g: PIXI.Graphics, trackInfo: any, model: GoslingTrackModel) {
     /* experimental edge bundling */
     if (model.spec().style?.linkStyle === 'experimentalEdgeBundling') {
+        console.log(model.spec());
         drawEdgeBundling(g, trackInfo, model);
         return;
     }

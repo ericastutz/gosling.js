@@ -348,6 +348,9 @@
         },
         {
           "$ref": "#/definitions/Text"
+        },
+        {
+          "$ref": "#/definitions/Tension"
         }
       ]
     },
@@ -8343,6 +8346,10 @@
           "description": "Offset the position of marks in y direction. This property is currently only supported for `text` marks.",
           "type": "number"
         },
+        "edgeBundlingTension": {
+          "description": "The tension of edge bundling. __Default__: 0.1 will be used as a default option.",
+          "type": "number"
+        },
         "enableSmoothPath": {
           "description": "Whether to enable smooth paths when drawing curves.\n\n__Default__: `false`",
           "type": "boolean"
@@ -8670,6 +8677,39 @@
         "template",
         "width"
       ],
+      "type": "object"
+    },
+    "Tension": {
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Values of the data"
+        },
+        "field": {
+          "description": "Name of the data field",
+          "type": "string"
+        },
+        "range": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ValueExtent"
+            },
+            {
+              "$ref": "#/definitions/Range"
+            }
+          ],
+          "description": "Ranges of visual channel values"
+        },
+        "type": {
+          "description": "Specify the data type",
+          "enum": [
+            "quantitative",
+            "nominal"
+          ],
+          "type": "string"
+        }
+      },
       "type": "object"
     },
     "Text": {
