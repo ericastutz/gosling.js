@@ -2,21 +2,16 @@ import type * as PIXI from 'pixi.js';
 import type { GoslingTrackModel } from '../gosling-track-model';
 import { cartesianToPolar } from '../utils/polar';
 import colorToHex from '../utils/color-to-hex';
-import { Bundler } from '../../mingle-master';
-import * as d3 from '/Users/ericastutz/Desktop/d3.ForceBundle-master';
-
+import * as d3_bundle from '../../d3.ForceBundle-master';
 
 export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: GoslingTrackModel) {
     /* track spec */
     const spec = model.spec();
 
-    console.info('test import', Bundler)
-
     if (!spec.width || !spec.height) {
-
         console.warn('Size of a track is not properly determined, so visual mark cannot be rendered');
         return;
-    } 
+    }
 
     /* data */
     const data = model.data();
@@ -26,6 +21,7 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
 
     /* circular parameters */
     const circular = spec.layout === 'circular';
+    const linear = spec.layout === 'linear';
     const trackInnerRadius = spec.innerRadius ?? 220;
     const trackOuterRadius = spec.outerRadius ?? 300;
     const startAngle = spec.startAngle ?? 0;
@@ -34,6 +30,20 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
     const tcx = trackWidth / 2.0;
     const tcy = trackHeight / 2.0;
 
+    /* make node_data dictionary */
+    type Node = {
+        x: number;
+        y: number;
+    };
+    const node_data: { [key: number]: Node } = {};
+    console.log(node_data);
+
+    /* make edge_data array */
+    const edge_data: any = [];
+
+    /* edge bundling tension */
+    const tension = spec.style?.edgeBundlingTension;
+
     /* render */
     data.forEach(d => {
         const x = model.encodedPIXIProperty('x', d);
@@ -41,10 +51,6 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
         const stroke = model.encodedPIXIProperty('stroke', d);
         const strokeWidth = model.encodedPIXIProperty('strokeWidth', d);
         const opacity = model.encodedPIXIProperty('opacity', d);
-
-        // TODO: We can first ignore `x1` and `x1e`
-        // let x1 = model.encodedPIXIProperty('x1', d);
-        // let x1e = model.encodedPIXIProperty('x1e', d);
 
         // TODO: Unsure at the moment if we need these.
         // const y = model.encodedPIXIProperty('y', d);
@@ -59,7 +65,6 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
         );
 
         if (circular) {
-            // TODO: Need to change this. The below code draw `straight` style links in circular layouts.
             const r = trackOuterRadius - trackRingSize / trackHeight;
             const posS = cartesianToPolar(x, trackWidth, r, tcx, tcy, startAngle, endAngle);
             const posE = cartesianToPolar(xe, trackWidth, r, tcx, tcy, startAngle, endAngle);
@@ -69,30 +74,69 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
             const x4 = posE.x;
             const y4 = posE.y;
 
-            g.moveTo(x1, y1); //start position
-            g.lineTo(345, 345); //end position
-            g.moveTo(x1, y1);
-            g.bezierCurveTo(345, 345, 345, 345, x4, y4); 
+            // monitor key values
+            let key = 0;
+            let key_end = key + 1;
 
-
-            var node_data = {
-                "0": {"x":922.24444, "y":347.29444},
-                "1": {"x":814.42222, "y":409.16111},
-                "2": {"x":738, "y":427.33333000000005},
-                "3": {"x":784.5, "y":381.33333},
-                "4": {"x":1066.09167, "y":350.40278},
-                "5": {"x":925.4861099999999, "y":313.275}
+            if (Object.keys(node_data).length > 0) {
+                for (let k = 0; k < Object.keys(node_data).length; k++) {
+                    if (x1 == node_data[k].x && y1 == node_data[k].y) {
+                        key = k;
+                    } else if (x4 == node_data[k].x && y4 == node_data[k].y) {
+                        key_end = k;
+                    }
+                }
             }
 
-            var edge_data = [{"source":"0", "target":"1"}, {"source":"4", "target":"2"}, {"source":"0", "target":"3"}, {"source":"0","target":"4"}, {"source":"2", "target":"5"}, {"source":"3", "target":"2"}, {"source":"3", "target":"4"}]
+            node_data[key] = {
+                x: x1,
+                y: y1
+            };
 
-            var fbundling = d3.ForceEdgeBundling()
-				.nodes(node_data)
-				.edges(edge_data);
-	        var results  = fbundling();	
+            node_data[key_end] = {
+                x: x4,
+                y: y4
+            };
 
+            edge_data[key] = { source: key, target: key + 1 };
 
+            g.beginFill(colorToHex('white'), 0);
+        } else if (linear) {
+            // TODO: Need to implement linear layout as well.
+            /* const midX = (x + xe) / 2.0;
+            g.beginFill(colorToHex('white'), 0);
+            g.arc(midX, 0, (xe - x) / 2.0, -Math.PI, Math.PI);
 
+            const x1 = x;
+            const x2 = xe;
+            const y1 = 0;
+
+            let key_end = key + 1;
+
+            if (Object.keys(node_data).length > 0) {
+                for (let k = 0; k < Object.keys(node_data).length; k++) {
+                    if (x1 == node_data[k].x) {
+                        key = k;
+                    } else if (x2 == node_data[k].x) {
+                        key_end = k;
+                    }
+                }
+            }
+
+            node_data[key] = {
+                x: x1,
+                y: y1
+            };
+
+            node_data[key_end] = {
+                x: x2,
+                y: y1
+            };
+
+            edge_data[key] = { source: key, target: key + 1 };
+
+            g.beginFill(colorToHex('white'), 0);
+            g.closePath(); */
         } else {
             // TODO: Need to change this. The below code draw `circular` style links in linear layouts.
             const midX = (x + xe) / 2.0;
@@ -101,4 +145,17 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
             g.closePath();
         }
     });
+
+    // @ts-expect-error
+    const fbundling = d3_bundle.ForceEdgeBundling().bundling_stiffness(tension).nodes(node_data).edges(edge_data);
+    const results = fbundling();
+
+    for (let i = 0; i < results.length; i++) {
+        for (let j = 0; j < results[i].length; j++) {
+            if (j != results[i].length - 1) {
+                g.moveTo(results[i][j].x, results[i][j].y);
+                g.lineTo(results[i][j + 1].x, results[i][j + 1].y);
+            }
+        }
+    }
 }

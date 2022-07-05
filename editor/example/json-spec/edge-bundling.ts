@@ -8,9 +8,10 @@ export const EDGE_BUNDLING: GoslingSpec = {
     spacing: 1,
     centerRadius: 0.3,
     alignment: 'stack',
-    style: { linkStyle: 'experimentalEdgeBundling' },
+    style: { linkStyle: 'experimentalEdgeBundling', edgeBundlingTension: 0.1 },
     tracks: [
         {
+            id: 'edge-bundling-track', // ← any string value you want to use
             data: {
                 url: 'https://raw.githubusercontent.com/vigsterkr/circos/master/data/5/segdup.txt',
                 type: 'csv',
