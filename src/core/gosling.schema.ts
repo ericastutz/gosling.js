@@ -1,3 +1,4 @@
+import { IsChannelValue } from './gosling.schema.guards';
 import type { Chromosome } from './utils/chrom-size';
 
 /* ----------------------------- ROOT SPEC ----------------------------- */
@@ -421,17 +422,12 @@ export interface Style {
      */
     linkStyle?: 'elliptical' | 'circular' | 'straight' | 'experimentalEdgeBundling';
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     /**
      * The tension of edge bundling. __Default__: 0.1 will be used as a default option.
      */
-    edgeBundlingTension?: number;
+     edgeBundlingTension?: number;
 
-=======
->>>>>>> parent of 4f16ae0 (chore: adding tension feature)
-=======
->>>>>>> parent of 4f16ae0 (chore: adding tension feature)
+
     /**
      * The minimum height of `withinLink` and `betweenLink` marks. Unit is a percentagle. __Default__: `0.5`
      * @Range [0, 1]

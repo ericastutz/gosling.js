@@ -36,13 +36,15 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
         y: number;
     };
     const node_data: { [key: number]: Node } = {};
-    console.log(node_data);
 
     /* make edge_data array */
     const edge_data: any = [];
 
     /* edge bundling tension */
     const tension = spec.style?.edgeBundlingTension;
+
+    /* monitor key values */
+    let key = 0;
 
     /* render */
     data.forEach(d => {
@@ -74,8 +76,6 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
             const x4 = posE.x;
             const y4 = posE.y;
 
-            // monitor key values
-            let key = 0;
             let key_end = key + 1;
 
             if (Object.keys(node_data).length > 0) {
@@ -102,14 +102,14 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
 
             g.beginFill(colorToHex('white'), 0);
         } else if (linear) {
-            // TODO: Need to implement linear layout as well.
-            /* const midX = (x + xe) / 2.0;
-            g.beginFill(colorToHex('white'), 0);
-            g.arc(midX, 0, (xe - x) / 2.0, -Math.PI, Math.PI);
+           /* const midX = (x + xe) / 2.0;
+            
+            //g.arc(midX, 0, (xe - x) / 2.0, -Math.PI, Math.PI);
 
             const x1 = x;
-            const x2 = xe;
-            const y1 = 0;
+            const y1 = 100;
+            const x4 = xe;
+            const y4 = 100;
 
             let key_end = key + 1;
 
@@ -117,7 +117,7 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
                 for (let k = 0; k < Object.keys(node_data).length; k++) {
                     if (x1 == node_data[k].x) {
                         key = k;
-                    } else if (x2 == node_data[k].x) {
+                    } else if (x4 == node_data[k].x) {
                         key_end = k;
                     }
                 }
@@ -129,25 +129,26 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
             };
 
             node_data[key_end] = {
-                x: x2,
-                y: y1
+                x: x4,
+                y: y4
             };
 
             edge_data[key] = { source: key, target: key + 1 };
 
-            g.beginFill(colorToHex('white'), 0);
-            g.closePath(); */
+            g.beginFill(colorToHex('white'), 0);*/
+
         } else {
-            // TODO: Need to change this. The below code draw `circular` style links in linear layouts.
             const midX = (x + xe) / 2.0;
             g.beginFill(colorToHex('white'), 0);
             g.arc(midX, 0, (xe - x) / 2.0, -Math.PI, Math.PI);
             g.closePath();
         }
+
+        key++;
     });
 
     // @ts-expect-error
-    const fbundling = d3_bundle.ForceEdgeBundling().bundling_stiffness(tension).nodes(node_data).edges(edge_data);
+    const fbundling = d3_bundle.ForceEdgeBundling().nodes(node_data).edges(edge_data).bundling_stiffness(0.1);
     const results = fbundling();
 
     for (let i = 0; i < results.length; i++) {
