@@ -114,9 +114,6 @@
         "opacity": {
           "type": "number"
         },
-        "tension": {
-          "type": "number"
-        },
         "quantitativeSizeRange": {
           "items": [
             {

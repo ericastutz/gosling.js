@@ -14,6 +14,7 @@ export function drawWithinLink(g: PIXI.Graphics, trackInfo: any, model: GoslingT
         return;
     }
 
+    const BreakError = {};
     /* track spec */
     const spec = model.spec();
 

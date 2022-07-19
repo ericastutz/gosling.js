@@ -425,8 +425,7 @@ export interface Style {
     /**
      * The tension of edge bundling. __Default__: 0.1 will be used as a default option.
      */
-     edgeBundlingTension?: number;
-
+    edgeBundlingTension?: number;
 
     /**
      * The minimum height of `withinLink` and `betweenLink` marks. Unit is a percentagle. __Default__: `0.5`

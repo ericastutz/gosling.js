@@ -4,9 +4,16 @@ import type { Channel } from '../gosling.schema';
 import { getValueUsingChannel, Is2DTrack } from '../gosling.schema.guards';
 import { cartesianToPolar, positionToRadian } from '../utils/polar';
 import colorToHex from '../utils/color-to-hex';
+import { drawEdgeBundling } from './edge-bundle';
 
 // TODO: This code is taken from `link.ts` which is for withinLink marks. Large parts should be removed.
 export function drawBetweenLink(g: PIXI.Graphics, trackInfo: any, model: GoslingTrackModel) {
+    /* experimental edge bundling */
+    if (model.spec().style?.linkStyle === 'experimentalEdgeBundling') {
+        drawEdgeBundling(g, trackInfo, model);
+        return;
+    }
+
     /* track spec */
     const spec = model.spec();
 
@@ -176,6 +183,7 @@ export function drawBetweenLink(g: PIXI.Graphics, trackInfo: any, model: Gosling
                     } else if (spec.style?.linkConnectionType === 'straight') {
                         g.moveTo(x, 0);
                         g.lineTo(0, rowPosition + rowHeight - y);
+                        
                     } else {
                         // spec.style?.linkConnectionType === 'corner'
                         g.moveTo(x, 0);
@@ -224,8 +232,6 @@ export function drawBetweenLink(g: PIXI.Graphics, trackInfo: any, model: Gosling
 
                     return;
                 }
-
-                // TODO: Not yet supported.
                 g.moveTo(xe, rowPosition + rowHeight);
                 g.lineTo(x, rowPosition);
             }

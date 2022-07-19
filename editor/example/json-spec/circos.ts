@@ -9,6 +9,7 @@ export const EX_SPEC_CIRCULR_RANGE: GoslingSpec = {
     spacing: 1,
     centerRadius: 0.3,
     alignment: 'stack',
+    style: { linkStyle: 'experimentalEdgeBundling', edgeBundlingTension: 0.1 },
     tracks: [
         {
             data: {

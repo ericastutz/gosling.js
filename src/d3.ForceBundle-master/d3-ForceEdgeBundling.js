@@ -118,8 +118,9 @@ export var ForceEdgeBundling = function () {
     function filter_self_loops(edgelist) {
         var filtered_edge_list = [];
 
-        for (var e = 0; e < edgelist.length; e++) {
+        for (var e = 0; e < edgelist.length - 1; e++) {
             if (
+                
                 data_nodes[edgelist[e].source].x != data_nodes[edgelist[e].target].x ||
                 data_nodes[edgelist[e].source].y != data_nodes[edgelist[e].target].y
             ) {
@@ -138,8 +139,10 @@ export var ForceEdgeBundling = function () {
         var prev = subdivision_points_for_edge[e_idx][i - 1];
         var next = subdivision_points_for_edge[e_idx][i + 1];
         var crnt = subdivision_points_for_edge[e_idx][i];
-        var x = prev.x - crnt.x + next.x - crnt.x;
-        var y = prev.y - crnt.y + next.y - crnt.y;
+        if (next != undefined) {
+            var x = prev.x - crnt.x + next.x - crnt.x;
+            var y = prev.y - crnt.y + next.y - crnt.y;
+        }
 
         x *= kP;
         y *= kP;
