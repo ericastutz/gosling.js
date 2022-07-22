@@ -183,7 +183,6 @@ export function drawBetweenLink(g: PIXI.Graphics, trackInfo: any, model: Gosling
                     } else if (spec.style?.linkConnectionType === 'straight') {
                         g.moveTo(x, 0);
                         g.lineTo(0, rowPosition + rowHeight - y);
-                        
                     } else {
                         // spec.style?.linkConnectionType === 'corner'
                         g.moveTo(x, 0);

@@ -120,7 +120,6 @@ export var ForceEdgeBundling = function () {
 
         for (var e = 0; e < edgelist.length - 1; e++) {
             if (
-                
                 data_nodes[edgelist[e].source].x != data_nodes[edgelist[e].target].x ||
                 data_nodes[edgelist[e].source].y != data_nodes[edgelist[e].target].y
             ) {
@@ -161,12 +160,19 @@ export var ForceEdgeBundling = function () {
         var compatible_edges_list = compatibility_list_for_edge[e_idx];
 
         for (var oe = 0; oe < compatible_edges_list.length; oe++) {
-            var force = {
-                x:
-                    subdivision_points_for_edge[compatible_edges_list[oe]][i].x -
-                    subdivision_points_for_edge[e_idx][i].x,
-                y: subdivision_points_for_edge[compatible_edges_list[oe]][i].y - subdivision_points_for_edge[e_idx][i].y
-            };
+            if (subdivision_points_for_edge[compatible_edges_list[oe]][i] != undefined && subdivision_points_for_edge[e_idx][i] != undefined) {
+                var force = {
+                    x:
+                        subdivision_points_for_edge[compatible_edges_list[oe]][i].x -
+                        subdivision_points_for_edge[e_idx][i].x,
+                    y: subdivision_points_for_edge[compatible_edges_list[oe]][i].y - subdivision_points_for_edge[e_idx][i].y
+                };
+            } else {
+                var force = {
+                    x: 0,
+                    y: 0
+                };
+            }
 
             if (Math.abs(force.x) > eps || Math.abs(force.y) > eps) {
                 var diff =
@@ -369,8 +375,10 @@ export var ForceEdgeBundling = function () {
                 }
                 for (var e = 0; e < data_edges.length; e++) {
                     for (var i = 0; i < P + 1; i++) {
-                        subdivision_points_for_edge[e][i].x += forces[e][i].x;
-                        subdivision_points_for_edge[e][i].y += forces[e][i].y;
+                        if (subdivision_points_for_edge[e][i] != undefined) {
+                            subdivision_points_for_edge[e][i].x += forces[e][i].x;
+                            subdivision_points_for_edge[e][i].y += forces[e][i].y;
+                        }
                     }
                 }
             }

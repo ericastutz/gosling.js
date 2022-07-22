@@ -3,8 +3,8 @@ import type { GoslingTrackModel } from '../gosling-track-model';
 import { cartesianToPolar } from '../utils/polar';
 import colorToHex from '../utils/color-to-hex';
 import * as d3_bundle from '../../d3.ForceBundle-master';
-import { CentroidLinkage, Dendrogram, HierarchicalClustering} from 'dbvis-hc';
-
+import { CentroidLinkage, Dendrogram, HierarchicalClustering } from 'dbvis-hc';
+import * as slider from '../../../gosling-react/src/example/WidgetEncoding.js';
 
 export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: GoslingTrackModel) {
     /* track spec */
@@ -51,7 +51,8 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
     const stroke_data: any = [];
 
     /* edge bundling tension */
-    let tension:any = spec.style?.edgeBundlingTension;
+    let tension: any = slider.WidgetEncoding();
+
     if (tension > 0.4) {
         tension = 0.4;
     } else if (tension < 0.0) {
@@ -83,16 +84,16 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
                 const y4 = posE.y;
 
                 key = key + 2;
-                let key_end = key + 1;
+                const key_end = key + 1;
 
-                stroke_data[key] = { strokeWidth: strokeWidth, stroke: stroke, opacity: opacity}
+                stroke_data[key] = { strokeWidth: strokeWidth, stroke: stroke, opacity: opacity };
 
                 /*if (Object.keys(node_data).length > 0) {
                     for (let k = 0; k < Object.keys(node_data).length; k++) {
                         if (node_data[k] != undefined) {
                             if (x1 == node_data[k].x && y1 == node_data[k].y) {
                                 key = k;
-                            } 
+                            }
                             if (x4 == node_data[k].x && y4 == node_data[k].y) {
                                 key_end = k;
                             }
@@ -108,16 +109,15 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
                 node_data[key_end] = {
                     x: x4,
                     y: y4
-                };  
+                };
 
                 if (key == 0) {
-                    edge_data[key] = { source: key, target: key_end};
+                    edge_data[key] = { source: key, target: key_end };
                 } else {
-                    edge_data[key/2] = { source: key, target: key_end};
+                    edge_data[key / 2] = { source: key, target: key_end };
                 }
 
                 g.beginFill(colorToHex('white'), 0);
-
             } else if (linear) {
                 const x1 = xe;
                 const y1 = rowPosition + rowHeight;
@@ -125,16 +125,16 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
                 const y4 = rowPosition;
 
                 key = key + 2;
-                let key_end = key + 1;
+                const key_end = key + 1;
 
-                stroke_data[key] = { strokeWidth: strokeWidth, stroke: stroke, opacity: opacity}
-                
-               /* if (Object.keys(node_data).length > 0) {
+                stroke_data[key] = { strokeWidth: strokeWidth, stroke: stroke, opacity: opacity };
+
+                /* if (Object.keys(node_data).length > 0) {
                     for (let k = 0; k < Object.keys(node_data).length; k++) {
                         if (node_data[k] != undefined) {
                             if (x1 == node_data[k].x && y1 == node_data[k].y) {
                                 key = k;
-                            } 
+                            }
                             if (x4 == node_data[k].x && y4 == node_data[k].y) {
                                 key_end = k;
                             }
@@ -151,26 +151,24 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
                     x: x4,
                     y: y4
                 };
- 
+
                 if (key == 0) {
-                    edge_data[key] = { source: key, target: key_end};
+                    edge_data[key] = { source: key, target: key_end };
                 } else {
-                    edge_data[key/2] = { source: key, target: key_end};
+                    edge_data[key / 2] = { source: key, target: key_end };
                 }
 
                 g.beginFill(colorToHex('white'), 0);
-
             } else {
                 const midX = (x + xe) / 2.0;
                 g.beginFill(colorToHex('white'), 0);
                 g.arc(midX, 0, (xe - x) / 2.0, -Math.PI, Math.PI);
                 g.closePath();
             }
-
         });
     });
 
-    let results:any;
+    let results: any;
     if (tension == undefined) {
         // @ts-expect-error
         const fbundling = d3_bundle.ForceEdgeBundling().nodes(node_data).edges(edge_data);
@@ -181,24 +179,30 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
         results = fbundling();
     }
 
-    
+    // printing results 
     for (let i = 0; i < results.length; i++) {
         for (let j = 0; j < results[i].length; j++) {
             if (j != results[i].length - 1) {
-                if (stroke_data[i]!= undefined) {
-                    // stroke
-                    g.lineStyle(
-                        stroke_data[i].strokeWidth,
-                        colorToHex(stroke_data[i].stroke),
-                        stroke_data[i].opacity, // alpha
-                        0.5 // alignment of the line to draw, (0 = inner, 0.5 = middle, 1 = outer)
-                    );
+                // stroke
+                g.lineStyle(
+                    stroke_data[i*2].strokeWidth,
+                    colorToHex(stroke_data[i*2].stroke),
+                    stroke_data[i*2].opacity, // alpha
+                    0.5 // alignment of the line to draw, (0 = inner, 0.5 = middle, 1 = outer)
+                );
+                
+                // checking to see if lines are outside of bounds 
+                const dist = Math.sqrt((results[i][j].x - tcx) ** 2 + (results[i][j].y - tcy) ** 2);
+                const dist2 = Math.sqrt((results[i][j + 1].x - tcx) ** 2 + (results[i][j + 1].y - tcy) ** 2);
+                // if outside of bounds, print straight line 
+                if (dist > trackOuterRadius || dist2 > trackOuterRadius) {
+                        g.moveTo(results[i][0].x, results[i][0].y);
+                        g.lineTo(results[i][results[i].length - 1].x, results[i][results[i].length - 1].y);
+                } else {
+                    g.moveTo(results[i][j].x, results[i][j].y);
+                    g.lineTo(results[i][j + 1].x, results[i][j + 1].y);
                 }
-                g.moveTo(results[i][j].x, results[i][j].y);
-                g.lineTo(results[i][j + 1].x, results[i][j + 1].y);
             }
         }
     }
-
 }
- 
