@@ -179,25 +179,25 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
         results = fbundling();
     }
 
-    // printing results 
+    // printing results
     for (let i = 0; i < results.length; i++) {
         for (let j = 0; j < results[i].length; j++) {
             if (j != results[i].length - 1) {
                 // stroke
                 g.lineStyle(
-                    stroke_data[i*2].strokeWidth,
-                    colorToHex(stroke_data[i*2].stroke),
-                    stroke_data[i*2].opacity, // alpha
+                    stroke_data[i * 2].strokeWidth,
+                    colorToHex(stroke_data[i * 2].stroke),
+                    stroke_data[i * 2].opacity, // alpha
                     0.5 // alignment of the line to draw, (0 = inner, 0.5 = middle, 1 = outer)
                 );
-                
-                // checking to see if lines are outside of bounds 
+
+                // checking to see if lines are outside of bounds
                 const dist = Math.sqrt((results[i][j].x - tcx) ** 2 + (results[i][j].y - tcy) ** 2);
                 const dist2 = Math.sqrt((results[i][j + 1].x - tcx) ** 2 + (results[i][j + 1].y - tcy) ** 2);
-                // if outside of bounds, print straight line 
+                // if outside of bounds, print straight line
                 if (dist > trackOuterRadius || dist2 > trackOuterRadius) {
-                        g.moveTo(results[i][0].x, results[i][0].y);
-                        g.lineTo(results[i][results[i].length - 1].x, results[i][results[i].length - 1].y);
+                    g.moveTo(results[i][0].x, results[i][0].y);
+                    g.lineTo(results[i][results[i].length - 1].x, results[i][results[i].length - 1].y);
                 } else {
                     g.moveTo(results[i][j].x, results[i][j].y);
                     g.lineTo(results[i][j + 1].x, results[i][j + 1].y);

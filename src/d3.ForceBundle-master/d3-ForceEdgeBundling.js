@@ -160,12 +160,17 @@ export var ForceEdgeBundling = function () {
         var compatible_edges_list = compatibility_list_for_edge[e_idx];
 
         for (var oe = 0; oe < compatible_edges_list.length; oe++) {
-            if (subdivision_points_for_edge[compatible_edges_list[oe]][i] != undefined && subdivision_points_for_edge[e_idx][i] != undefined) {
+            if (
+                subdivision_points_for_edge[compatible_edges_list[oe]][i] != undefined &&
+                subdivision_points_for_edge[e_idx][i] != undefined
+            ) {
                 var force = {
                     x:
                         subdivision_points_for_edge[compatible_edges_list[oe]][i].x -
                         subdivision_points_for_edge[e_idx][i].x,
-                    y: subdivision_points_for_edge[compatible_edges_list[oe]][i].y - subdivision_points_for_edge[e_idx][i].y
+                    y:
+                        subdivision_points_for_edge[compatible_edges_list[oe]][i].y -
+                        subdivision_points_for_edge[e_idx][i].y
                 };
             } else {
                 var force = {
