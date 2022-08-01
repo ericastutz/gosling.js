@@ -4,7 +4,6 @@ import { cartesianToPolar } from '../utils/polar';
 import colorToHex from '../utils/color-to-hex';
 import * as d3_bundle from '../../d3.ForceBundle-master';
 import { CentroidLinkage, Dendrogram, HierarchicalClustering } from 'dbvis-hc';
-import * as slider from '../../../gosling-react/src/example/WidgetEncoding.js';
 
 export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: GoslingTrackModel) {
     /* track spec */
@@ -51,7 +50,7 @@ export function drawEdgeBundling(g: PIXI.Graphics, trackInfo: any, model: Goslin
     const stroke_data: any = [];
 
     /* edge bundling tension */
-    let tension: any = slider.WidgetEncoding();
+    let tension: any = spec.style?.edgeBundlingTension;
 
     if (tension > 0.4) {
         tension = 0.4;

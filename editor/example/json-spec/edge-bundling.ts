@@ -14,7 +14,6 @@ export const EDGE_BUNDLING: GoslingSpec = {
             id: 'edge-bundling-track', // ← any string value you want to use
             data: {
                 url: 'https://raw.githubusercontent.com/vigsterkr/circos/master/data/5/segdup.txt',
-                //url: 'https://gist.githubusercontent.com/ericastutz/ad931e3d12158c79a7d8b3723873fdbe/raw/234b04b198b4c3c28a4f71388f38efdeaa773aa5/gistfile1.txt',
                 type: 'csv',
                 headerNames: ['id', 'chr', 'p1', 'p2'],
                 chromosomePrefix: 'hs',
